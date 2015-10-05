@@ -14,7 +14,12 @@
 *~
 *.swp
 *.patch
-*.bin
+*u*.bin
+sdfuse_q/add_padding
+sdfuse_q/add_sign
+sdfuse_q/chksum
+tools/mkfs4412spl
+spl/fs4412-spl.bin
 
 # Build tree
 /build-*

@@ -439,6 +439,16 @@ $(obj)u-boot.srec:	$(obj)u-boot
 $(obj)u-boot.bin:	$(obj)u-boot
 		$(OBJCOPY) ${OBJCFLAGS} -O binary $< $@
 		$(BOARD_SIZE_CHECK)
+		@#./mkuboot
+		@split -b 14336 u-boot.bin bl2
+		@+make -C sdfuse_q/
+		@#cp u-boot.bin u-boot-4212.bin
+		@#cp u-boot.bin u-boot-4212.bin
+		@#./sdfuse_q/add_sign
+		@./sdfuse_q/chksum
+		@./sdfuse_q/add_padding
+		@rm bl2a*
+		@echo
 
 $(obj)u-boot.ldr:	$(obj)u-boot
 		$(CREATE_LDR_ENV)
@@ -851,7 +861,9 @@ tidy:	clean
 	@find $(OBJTREE) -type f \( -name '*.depend*' \) -print | xargs rm -f
 
 clobber:	tidy
-	@find $(OBJTREE) -type f \( -name '*.srec' \
+	@find $(OBJTREE) \
+		-path "$(OBJTREE)/CodeSign4SecureBoot" -prune -o \
+		-type f \( -name '*.srec' \
 		-o -name '*.bin' -o -name u-boot.img \) \
 		-print0 | xargs -0 rm -f
 	@rm -f $(OBJS) $(obj)*.bak $(obj)ctags $(obj)etags $(obj)TAGS \

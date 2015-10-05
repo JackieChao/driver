@@ -134,6 +134,21 @@ reset:
 	msr	cpsr,r0
 
 /*
+ * LED for fs4412
+ */
+
+#if 1
+	ldr r0, =0x11000c40 @GPK2-7 led2
+	ldr r1, [r0]
+	bic r1, r1, #0xf0000000
+	orr r1, r1, #0x10000000
+	str r1, [r0]
+
+	ldr r0, =0x11000c44
+	mov r1, #0xff
+	str r1, [r0]
+#endif
+/*
  * Setup vector:
  * (OMAP4 spl TEXT_BASE is not 32 byte aligned.
  * Continue to use ROM code vector only in OMAP4 spl)

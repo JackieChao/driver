@@ -39,6 +39,7 @@ _TEXT_BASE:
 
 	.globl lowlevel_init
 lowlevel_init:
+	ldr sp, =0x02060000 @use iRom stack in bl2
 	push	{lr}
 
 	/* r5 has always zero */
@@ -64,6 +65,22 @@ lowlevel_init:
 	ldr	r2, =S5P_CHECK_SLEEP
 	cmp	r1, r2
 	beq	wakeup_reset
+/*
+ *  for close watchdog
+ */
+
+#if 1
+	ldr r0, =0x1002330c
+	ldr r1, [r0]
+	orr r1, r1, #0x300
+	str r1, [r0]
+	ldr r0, =0x11000c08
+	ldr r1, =0x0
+	str r1, [r0]
+	ldr r0, =0x1002040c
+	ldr r1, =0x0
+	str r1, [r0]
+#endif
 
 	/*
 	 * If U-boot is already running in ram, no need to relocate U-Boot.
@@ -87,7 +104,7 @@ lowlevel_init:
 1:
 	/* for UART */
 	bl uart_asm_init
-	bl tzpc_init
+	// bl tzpc_init
 	pop	{pc}
 
 wakeup_reset:
@@ -327,6 +344,13 @@ system_clock_init:
  */
 	.globl uart_asm_init
 uart_asm_init:
+	ldr r0, =0x10030000
+	ldr r1, =0x666666
+	ldr r2, =CLK_SRC_PERIL0_OFFSET
+	str r1, [r0, r2]
+	ldr r1, =0x777777
+	ldr r2, =CLK_DIV_PERIL0_OFFSET
+	str r1, [r0, r2]
 
 	/* setup UART0-UART3 GPIOs (part1) */
 	mov	r0, r7

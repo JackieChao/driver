@@ -82,12 +82,12 @@
 /* Command definition*/
 #include <config_cmd_default.h>
 
-#undef CONFIG_CMD_PING
+#define CONFIG_CMD_PING
 #define CONFIG_CMD_ELF
 #define CONFIG_CMD_DHCP
 #define CONFIG_CMD_MMC
 #define CONFIG_CMD_FAT
-#undef CONFIG_CMD_NET
+#define CONFIG_CMD_NET
 #undef CONFIG_CMD_NFS
 
 #define CONFIG_BOOTDELAY		3
@@ -101,7 +101,7 @@
 /* Miscellaneous configurable options */
 #define CONFIG_SYS_LONGHELP		/* undef to save memory */
 #define CONFIG_SYS_HUSH_PARSER		/* use "hush" command parser	*/
-#define CONFIG_SYS_PROMPT		"fs4412 # "
+#define CONFIG_SYS_PROMPT		"FS4412 # "
 #define CONFIG_SYS_CBSIZE		256	/* Console I/O Buffer Size*/
 #define CONFIG_SYS_PBSIZE		384	/* Print Buffer Size */
 #define CONFIG_SYS_MAXARGS		16	/* max number of command args */
@@ -130,7 +130,7 @@
 /* FLASH and environment organization */
 #define CONFIG_SYS_NO_FLASH		1
 #undef CONFIG_CMD_IMLS
-#define CONFIG_IDENT_STRING		" for fs4412"
+#define CONFIG_IDENT_STRING		" for FS4412"
 
 #define CONFIG_CLK_1000_400_200
 
@@ -154,4 +154,28 @@
 
 /* Enable devicetree support */
 #define CONFIG_OF_LIBFDT
+
+
+#ifdef CONFIG_CMD_NET
+#define CONFIG_NET_MULTI
+#define CONFIG_DRIVER_DM9000   			1
+#define CONFIG_DM9000_BASE     			0x05000000
+#define DM9000_IO      					CONFIG_DM9000_BASE
+#define DM9000_DATA    					(CONFIG_DM9000_BASE + 4)
+#define CONFIG_DM9000_USE_16BIT
+#define CONFIG_DM9000_NO_SROM  			1
+#define CONFIG_ETHADDR 					11:22:33:44:55:66
+#define CONFIG_IPADDR  					192.168.9.200
+#define CONFIG_SERVERIP     			192.168.9.120
+#define CONFIG_GATEWAYIP       			192.168.9.1
+#define CONFIG_NETMASK 					255.255.255.0
+#endif
+
+
+
+
+
+
+
+
 #endif	/* __CONFIG_H */
